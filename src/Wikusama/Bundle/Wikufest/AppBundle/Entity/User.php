@@ -58,8 +58,11 @@ class User implements AdvancedUserInterface, \Serializable
 
     public function __construct()
     {
-        $this->isActive = true;
-        // may not be needed, see section on salt below
+        /**
+         * By default user Accoount in not Active position
+         * Don't direct update isActive status, please set using Account->setActivationAccount
+         */
+        $this->isActive = false;
         $this->roles = new ArrayCollection();
     }
 

@@ -26,6 +26,39 @@ class Account
         $this->encoderFactory = $encoderFactory;
     }
     
+    public function setAccountActivation($username, $activationStatus = true)
+    {
+        $user = $this->entityManager
+                    ->getRepository("WikusamaWikufestAppBundle:User")->findOneBy(array(
+                            'username' => $username
+                        ));
+        
+        $user->setIsActive(true);
+        
+        $userProfle = $this->entityManager
+                    ->getRepository("WikusamaWikufestAppBundle:UserProfile")->findOneBy(array(
+                            'user' => $user
+                        ));
+                        
+        $userProfle->setAccountActivation(\new DateTime());
+        
+        $this->entityManager->getConnection()->beginTransaction();
+        
+        try
+        {
+            
+            $this->entityManager->persist($user);
+            $this->entityManager->persist($userProfle);
+        }
+        }catch (Exception $e) {
+            $this->entityManager->getConnection()->rollback();
+            throw $e;
+        }
+        
+        $this->entityManager->flush();
+        $this->entityManager->getConnection()->commit();
+    }
+    
     public function createAccount(
             $username, 
             $email, 
@@ -120,6 +153,5 @@ class Account
         
         $this->entityManager->flush();
         $this->entityManager->getConnection()->commit();
-         
     }
 }
