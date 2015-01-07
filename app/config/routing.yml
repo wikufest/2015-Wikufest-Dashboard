@@ -1,0 +1,19 @@
+wikufest_dashboard:
+    resource: "@WikusamaWikufestAppBundle/Resources/config/routing.yml"
+    prefix:   /
+
+app_login:
+    path:     /login
+    defaults: { _controller: WikusamaWikufestAppBundle:Account/Login:index }
+    
+
+app_login_check:
+    path:     /loginCheck
+    
+app_logout:
+    path:     /logout
+
+    
+# app:
+#    resource: @AppBundle/Controller/
+#    type:     annotation
