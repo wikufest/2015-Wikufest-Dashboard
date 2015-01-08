@@ -50,50 +50,61 @@ class UserProfile
     private $summary;
     
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, name="profile_picture_path")
      */
     private $profilePicturePath;
     
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, name="twitter_account")
      */
     private $twitterAccount;
     
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, name="facebook_account"))
      */
     private $facebookAccount;
     
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, name="linkedin_account")
      */
     private $linkedinAccount;
     
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, name="student_class_name")
      */
-    private $studentClass;
+    private $studentClassName;
     
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, name="student_id_number")
      */
     private $studentIdNumber;
     
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, name="phone_number")
      */
     private $phoneNumber;
     
     /**
-     * @ORM\Column(type="datetime", length=255)
+     * @ORM\Column(type="datetime", name="account_activation")
      */
     private $accountActivation;
+    
+    /**
+     * @ORM\Column(type="datetime", name="date_created")
+     */
+    private $dateCreated;
     
     /**
      * @ORM\OneToOne(targetEntity="\Wikusama\Bundle\Wikufest\AppBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      **/
     private $user;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="\Wikusama\Bundle\Wikufest\AppBundle\Entity\AudiencePromoCodeStatus")
+     * @ORM\JoinColumn(name="audience_promocode_status_id", referencedColumnName="id")
+     **/
+    private $audiencePromoCodeStatus;
 
     /**
      * Get id
@@ -313,29 +324,6 @@ class UserProfile
     }
 
     /**
-     * Set studentClass
-     *
-     * @param string $studentClass
-     * @return UserProfile
-     */
-    public function setStudentClass($studentClass)
-    {
-        $this->studentClass = $studentClass;
-
-        return $this;
-    }
-
-    /**
-     * Get studentClass
-     *
-     * @return string 
-     */
-    public function getStudentClass()
-    {
-        return $this->studentClass;
-    }
-
-    /**
      * Set studentIdNumber
      *
      * @param string $studentIdNumber
@@ -402,5 +390,74 @@ class UserProfile
     public function getAccountActivation()
     {
         return $this->accountActivation;
+    }
+
+    /**
+     * Set studentClassName
+     *
+     * @param string $studentClassName
+     * @return UserProfile
+     */
+    public function setStudentClassName($studentClassName)
+    {
+        $this->studentClassName = $studentClassName;
+
+        return $this;
+    }
+
+    /**
+     * Get studentClassName
+     *
+     * @return string 
+     */
+    public function getStudentClassName()
+    {
+        return $this->studentClassName;
+    }
+
+    /**
+     * Set audiencePromoCodeStatus
+     *
+     * @param \Wikusama\Bundle\Wikufest\AppBundle\Entity\AudiencePromoCodeStatus $audiencePromoCodeStatus
+     * @return UserProfile
+     */
+    public function setAudiencePromoCodeStatus(\Wikusama\Bundle\Wikufest\AppBundle\Entity\AudiencePromoCodeStatus $audiencePromoCodeStatus = null)
+    {
+        $this->audiencePromoCodeStatus = $audiencePromoCodeStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get audiencePromoCodeStatus
+     *
+     * @return \Wikusama\Bundle\Wikufest\AppBundle\Entity\AudiencePromoCodeStatus 
+     */
+    public function getAudiencePromoCodeStatus()
+    {
+        return $this->audiencePromoCodeStatus;
+    }
+
+    /**
+     * Set dateCreated
+     *
+     * @param \DateTime $dateCreated
+     * @return UserProfile
+     */
+    public function setDateCreated($dateCreated)
+    {
+        $this->dateCreated = $dateCreated;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreated
+     *
+     * @return \DateTime 
+     */
+    public function getDateCreated()
+    {
+        return $this->dateCreated;
     }
 }

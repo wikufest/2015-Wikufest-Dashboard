@@ -26,7 +26,7 @@ class Account
         $this->encoderFactory = $encoderFactory;
     }
     
-    public function setAccountActivation($username, $activationStatus = true)
+    public function activateAccount($username)
     {
         $user = $this->entityManager
                     ->getRepository("WikusamaWikufestAppBundle:User")->findOneBy(array(
