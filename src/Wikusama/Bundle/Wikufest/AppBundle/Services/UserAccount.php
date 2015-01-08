@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Wikusama\Bundle\Wikufest\AppBundle\Entity\User;
 use Wikusama\Bundle\Wikufest\AppBundle\Entity\UserProfile;
 
-class Account
+class UserAccount
 {
     protected $entityManager;
     protected $encoderFactory;
@@ -106,7 +106,9 @@ class Account
                             'role' => $role
                         ));
         
+        $user->clearRole();
         $user->addRole($role);
+        
         $this->entityManager->persist($user);
     }
     

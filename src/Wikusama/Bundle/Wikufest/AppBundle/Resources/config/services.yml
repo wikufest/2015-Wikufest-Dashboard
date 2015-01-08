@@ -1,4 +1,7 @@
 services:
-    wikufest.account:
-        class: Wikusama\Bundle\Wikufest\AppBundle\Services\Account
+    wikufest.user_account:
+        class: Wikusama\Bundle\Wikufest\AppBundle\Services\UserAccount
         arguments: ["@doctrine.orm.entity_manager", "@security.encoder_factory"]
+    wikufest.user_blog:
+        class: Wikusama\Bundle\Wikufest\AppBundle\Services\UserBlog
+        arguments: ["@doctrine.orm.entity_manager"]

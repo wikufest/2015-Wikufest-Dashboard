@@ -4,7 +4,7 @@ wikufest_dashboard:
 
 app_login:
     path:     /login
-    defaults: { _controller: WikusamaWikufestAppBundle:Account/Login:index }
+    defaults: { _controller: WikusamaWikufestAppBundle:UserAccount/Login:index }
     
 
 app_login_check:

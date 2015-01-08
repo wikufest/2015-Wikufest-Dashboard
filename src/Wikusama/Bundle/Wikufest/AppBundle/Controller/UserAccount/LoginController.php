@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Wikusama\Bundle\Wikufest\AppBundle\Controller\Account;
+namespace Wikusama\Bundle\Wikufest\AppBundle\Controller\UserAccount;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Security;
@@ -36,7 +36,7 @@ class LoginController extends Controller
         $lastUsername = (null === $session) ? '' : $session->get(Security::LAST_USERNAME);
 
         return $this->render(
-            'WikusamaWikufestAppBundle:Account/Login:index.html.twig',
+            'WikusamaWikufestAppBundle:UserAccount/Login:index.html.twig',
             array(
                 // last username entered by the user
                 'last_username' => $lastUsername,
