@@ -10,7 +10,7 @@ http://www.php-fig.org/psr/psr-2/
 
 http://symfony.com/doc/current/best_practices/index.html
 
-http://symfony.com/doc/current/cookbook/bundles/best_practices.html
+http://martinfowler.com/articles/enterprisePatterns.html
 
 http://www.apache.org/foundation/license-faq.html
 
