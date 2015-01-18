@@ -26,31 +26,79 @@ class UserAccount
         $this->encoderFactory = $encoderFactory;
     }
     
-    public function activateAccount($username)
+    public function bulkActivateFromCsv($csvPath)
     {
-        $user = $this->entityManager
-                    ->getRepository("WikusamaWikufestAppBundle:User")->findOneBy(array(
-                            'username' => $username
-                        ));
+        /**
+         * [0] => Username
+         * [1] => Email
+         */
         
-        $user->setIsActive(true);
+        $fileHandler = fopen($csvPath,"r");
+
+        $index = 0;
+        $batchSize = 20;
+        while (($row = fgetcsv($fileHandler)) !== FALSE)
+        {
+            $this->activateAccount(
+                    $row[0], // Username
+                    $row[1] // Email
+                );
+            
+            $this->entityManager->flush();
+            
+            if (($index % $batchSize) === 0) {
+                $this->entityManager->flush();
+                $this->entityManager->clear();
+            }
+            
+            $index++;
+        }
         
-        $userProfle = $this->entityManager
-                    ->getRepository("WikusamaWikufestAppBundle:UserProfile")->findOneBy(array(
-                            'user' => $user
-                        ));
-                        
-        $userProfle->setAccountActivation(\new DateTime());
-        
+        $this->entityManager->flush();
+        $this->entityManager->clear();
+    }
+    
+    public function activateAccount($username, $email = null)
+    {
         $this->entityManager->getConnection()->beginTransaction();
         
         try
         {
+            $user = $this->entityManager
+                    ->getRepository("WikusamaWikufestAppBundle:User")->findOneBy(array(
+                            'username' => $username
+                        ));
             
-            $this->entityManager->persist($user);
-            $this->entityManager->persist($userProfle);
-        }
-        }catch (Exception $e) {
+            if(!$user->getIsActive())
+            {
+                // If user is inActive position then do activation if not do nothing
+                $user->setIsActive(true);
+                $userNewPassword = $this->getRandomPassword();
+                
+                $encoder = $this->encoderFactory->getEncoder($user);
+                $pass = $encoder->encodePassword($userNewPassword, $user->getSalt());
+                
+                if($email !== null && $email  !== "")
+                {
+                    $user->setEmail($email);
+                }
+                
+                $user->setPassword($password);
+                
+                
+                $userProfle = $this->entityManager
+                            ->getRepository("WikusamaWikufestAppBundle:UserProfile")->findOneBy(array(
+                                    'user' => $user
+                                ));
+                
+                $userProfle->setAccountActivation(new \DateTime());
+                
+                
+                
+                $this->entityManager->persist($user);
+                $this->entityManager->persist($userProfle);
+            }
+        }catch (\Exception $e) {
             $this->entityManager->getConnection()->rollback();
             throw $e;
         }
@@ -81,12 +129,26 @@ class UserAccount
     
     public function createUserProfile(
             User $user,
-            $fullname = ""
+            $values = array()
         )
     {
         $userProfle = new UserProfile();
         $userProfle->setUser($user);
-        $userProfle->setFullname($fullname);
+        
+        if(isset($values['fullname']) && $values['fullname'] !== "")
+        {
+            $userProfle->setFullname($values['fullname']);
+        }
+        
+        if(isset($values['studentClassName']) && $values['studentClassName'] !== "")
+        {
+            $userProfle->setStudentClassName($values['studentClassName']);
+        }
+        
+        if(isset($values['gender']) && $values['gender'] !== "")
+        {
+            $userProfle->setGender($values['gender']);
+        }
         
         $this->entityManager->persist($userProfle);
         $this->entityManager->flush();
@@ -112,14 +174,17 @@ class UserAccount
         $this->entityManager->persist($user);
     }
     
-    public function importFromCsv($csvPath)
+    public function bulkCreateFromCsv($csvPath)
     {
         /**
          * [0] => Username
          * [1] => Email
-         * [2] => Password
-         * [3] => Fullname
-         * [4] => Role
+         * [2] => Fullname
+         * [3] => Student ID Number
+         * [4] => Student Class Number
+         * [5] => Gender
+         * [6] => Password
+         * [7] => Role
          */
          
         $fileHandler = fopen($csvPath,"r");
@@ -128,32 +193,54 @@ class UserAccount
         
         try
         {
+            $index = 0;
+            $batchSize = 20;
             while (($row = fgetcsv($fileHandler)) !== FALSE)
             {
                 $user = $this->createAccount(
                             $row[0], // Username
                             $row[1], // Email
-                            $row[2]  // Passaword
-                        );
-                
-                $userProfle = $this->createUserProfile(
+                            $row[6]  // Password
+                        );     
+
+                $userProfile = $this->createUserProfile(
                                 $user,
-                                $row[3] // Fullname
-                            );         
-                
+                                array(
+                                    "fullname" => $row[2],
+                                    "studentClassName" => $row[4],
+                                    "gender" => $row[5]
+                                )
+                            );
+                            
                 $this->addUserToRole(
                             $row[0], // Username
-                            $row[4]  // Role
+                            $row[7]  // Role
                         );
                 
+                $this->entityManager->persist($user);
+                $this->entityManager->persist($userProfile);
+                
                 $this->entityManager->flush();
+                
+                if (($index % $batchSize) === 0) {
+                    $this->entityManager->flush();
+                    $this->entityManager->clear();
+                }
+                
+                $index++;
             }
-        }catch (Exception $e) {
+        }catch (\Exception $e) {
             $this->entityManager->getConnection()->rollback();
             throw $e;
         }
         
-        $this->entityManager->flush();
         $this->entityManager->getConnection()->commit();
+        $this->entityManager->flush();
+        $this->entityManager->clear();
+    }
+    
+    public function generateRandomPassword()
+    {
+        return bin2hex(openssl_random_pseudo_bytes(4));
     }
 }

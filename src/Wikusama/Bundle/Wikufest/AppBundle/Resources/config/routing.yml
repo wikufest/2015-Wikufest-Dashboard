@@ -1,3 +1,11 @@
 wikufest_homepage:
-    path:     /
+    path: /
     defaults: { _controller: WikusamaWikufestAppBundle:Home\Home:index }
+    
+wikufest_useraccount_createuseraccount_loadfromfile:
+    path: /UserAccount/CreateUserAccount/LoadFromFile
+    defaults: { _controller: WikusamaWikufestAppBundle:UserAccount/CreateUserAccount:loadFromFile }
+    
+wikufest_useraccount_activateuseraccount_loadfromfile:
+    path: /UserAccount/ActivateUserAccount/LoadFromFile
+    defaults: { _controller: WikusamaWikufestAppBundle:UserAccount/ActivateUserAccount:loadFromFile }

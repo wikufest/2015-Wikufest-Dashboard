@@ -30,67 +30,72 @@ class UserProfile
     private $id;
     
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $fullname;
     
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $occupacy;
     
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $companyName;
     
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $summary;
     
     /**
-     * @ORM\Column(type="string", length=255, name="profile_picture_path")
+     * @ORM\Column(type="string", length=255, name="profile_picture_path", nullable=true)
      */
     private $profilePicturePath;
     
     /**
-     * @ORM\Column(type="string", length=255, name="twitter_account")
+     * @ORM\Column(type="string", length=255, name="twitter_account", nullable=true)
      */
     private $twitterAccount;
     
     /**
-     * @ORM\Column(type="string", length=255, name="facebook_account"))
+     * @ORM\Column(type="string", length=255, name="facebook_account", nullable=true)
      */
     private $facebookAccount;
     
     /**
-     * @ORM\Column(type="string", length=255, name="linkedin_account")
+     * @ORM\Column(type="string", length=255, name="linkedin_account", nullable=true)
      */
     private $linkedinAccount;
     
     /**
-     * @ORM\Column(type="string", length=255, name="student_class_name")
+     * @ORM\Column(type="string", length=255, name="student_class_name", nullable=true)
      */
     private $studentClassName;
     
     /**
-     * @ORM\Column(type="string", length=255, name="student_id_number")
+     * @ORM\Column(type="string", length=255, name="student_id_number", nullable=true)
      */
     private $studentIdNumber;
     
     /**
-     * @ORM\Column(type="string", length=255, name="phone_number")
+     * @ORM\Column(type="string", length=255, name="phone_number", nullable=true)
      */
     private $phoneNumber;
     
     /**
-     * @ORM\Column(type="datetime", name="account_activation")
+     * @ORM\Column(type="string", length=1, name="gender", nullable=true)
+     */
+    private $gender;
+    
+    /**
+     * @ORM\Column(type="datetime", name="account_activation", nullable=true)
      */
     private $accountActivation;
     
     /**
-     * @ORM\Column(type="datetime", name="date_created")
+     * @ORM\Column(type="datetime", name="date_created", nullable=true)
      */
     private $dateCreated;
     
@@ -459,5 +464,28 @@ class UserProfile
     public function getDateCreated()
     {
         return $this->dateCreated;
+    }
+
+    /**
+     * Set gender
+     *
+     * @param string $gender
+     * @return UserProfile
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    /**
+     * Get gender
+     *
+     * @return string 
+     */
+    public function getGender()
+    {
+        return $this->gender;
     }
 }
