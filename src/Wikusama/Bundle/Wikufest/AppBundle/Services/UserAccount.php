@@ -14,16 +14,40 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Wikusama\Bundle\Wikufest\AppBundle\Entity\User;
 use Wikusama\Bundle\Wikufest\AppBundle\Entity\UserProfile;
+use Wikusama\Bundle\Wikufest\AppBundle\Services\Notification;
 
 class UserAccount
 {
     protected $entityManager;
     protected $encoderFactory;
+    protected $mailer;
+    protected $notificationService;
 
-    public function __construct(EntityManager $entityManager, EncoderFactory $encoderFactory)
+    public function __construct(
+        EntityManager $entityManager, 
+        EncoderFactory $encoderFactory, 
+        \Swift_Mailer $mailer, 
+        Notification $notificationService
+        )
     {
         $this->entityManager = $entityManager;
         $this->encoderFactory = $encoderFactory;
+        $this->mailer = $mailer;
+        $this->notificationService = $notificationService;
+    }
+    
+    public function changeUserPassword($username, $newPassword)
+    {
+        $user = $this->entityManager
+                    ->getRepository("WikusamaWikufestAppBundle:User")->findOneBy(array(
+                            'username' => $username
+                        ));
+                        
+        $user->setPassword($this->getEncodedPassword($user, $newPassword));
+        
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+        $this->entityManager->clear();
     }
     
     public function bulkActivateFromCsv($csvPath)
@@ -61,50 +85,73 @@ class UserAccount
     public function activateAccount($username, $email = null)
     {
         $this->entityManager->getConnection()->beginTransaction();
+        $userNewPassword = $this->generateRandomPassword();
         
         try
         {
-            $user = $this->entityManager
-                    ->getRepository("WikusamaWikufestAppBundle:User")->findOneBy(array(
-                            'username' => $username
-                        ));
-            
-            if(!$user->getIsActive())
+            $userProfile = $this->entityManager
+                    ->getRepository("WikusamaWikufestAppBundle:UserProfile")->loadUserProfileByUsername(
+                        $username
+                    );
+                    
+            if(!$userProfile['users_is_active'])
             {
                 // If user is inActive position then do activation if not do nothing
                 $user->setIsActive(true);
-                $userNewPassword = $this->getRandomPassword();
-                
-                $encoder = $this->encoderFactory->getEncoder($user);
-                $pass = $encoder->encodePassword($userNewPassword, $user->getSalt());
                 
                 if($email !== null && $email  !== "")
                 {
                     $user->setEmail($email);
                 }
                 
-                $user->setPassword($password);
+                $user->setPassword(
+                    $this->getEncodedPassword($user, $userNewPassword)
+                );
                 
                 
-                $userProfle = $this->entityManager
+                $userProfileObject = $this->entityManager
                             ->getRepository("WikusamaWikufestAppBundle:UserProfile")->findOneBy(array(
                                     'user' => $user
                                 ));
                 
-                $userProfle->setAccountActivation(new \DateTime());
-                
-                
+                $userProfileObject->setAccountActivation(new \DateTime());
                 
                 $this->entityManager->persist($user);
-                $this->entityManager->persist($userProfle);
+                $this->entityManager->persist($userProfileObject);
             }
         }catch (\Exception $e) {
             $this->entityManager->getConnection()->rollback();
             throw $e;
         }
         
+        
         $this->entityManager->flush();
         $this->entityManager->getConnection()->commit();
+        
+        // Re-populate data
+        $userProfile = $this->entityManager
+                    ->getRepository("WikusamaWikufestAppBundle:UserProfile")->loadUserProfileByUsername(
+                        $username
+                    );
+    
+            
+        if(!empty($userProfile['users_email']) && !is_null($userProfile['users_email'])){
+            $this->notificationService->userAccountActivation(
+                $userProfile['users_email'],
+                $userProfile['fullname'],
+                $userProfile['users_username'],
+                $userNewPassword
+            );
+        }  
+        
+    }
+    
+    public function getEncodedPassword(User $user, $password)
+    {
+        $encoder = $this->encoderFactory->getEncoder($user);
+        $hashedPassword = $encoder->encodePassword($password, $user->getSalt());
+        
+        return $hashedPassword;
     }
     
     public function createAccount(
@@ -114,12 +161,12 @@ class UserAccount
         )
     {
         $user = new User();
-         
-        $encoder = $this->encoderFactory->getEncoder($user);
-        $pass = $encoder->encodePassword($password, $user->getSalt());
+        
         $user->setUsername($username);
         $user->setEmail($email);
-        $user->setPassword($pass);
+        $user->setPassword(
+            $this->getEncodedPassword($user, $password)
+        );
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
@@ -197,10 +244,20 @@ class UserAccount
             $batchSize = 20;
             while (($row = fgetcsv($fileHandler)) !== FALSE)
             {
+                // If password not defined system will generate random password
+                if(!isset($row[6]) || empty($row[6]) || is_null($row[6]) )
+                {
+                    $password = $this->generateRandomPassword();
+                }
+                else
+                {
+                    $password = $row[6];
+                }
+                
                 $user = $this->createAccount(
                             $row[0], // Username
                             $row[1], // Email
-                            $row[6]  // Password
+                            $password // Password
                         );     
 
                 $userProfile = $this->createUserProfile(

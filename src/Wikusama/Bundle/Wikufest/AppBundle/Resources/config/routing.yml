@@ -9,3 +9,8 @@ wikufest_useraccount_createuseraccount_loadfromfile:
 wikufest_useraccount_activateuseraccount_loadfromfile:
     path: /UserAccount/ActivateUserAccount/LoadFromFile
     defaults: { _controller: WikusamaWikufestAppBundle:UserAccount/ActivateUserAccount:loadFromFile }
+
+wikufest_useraccount_activateuseraccount_activatesingleaccount:
+    path: /UserAccount/ActivateUserAccount/ActivateSingleAccount
+    defaults: { _controller: WikusamaWikufestAppBundle:UserAccount/ActivateUserAccount:activateSingleAccount }
+

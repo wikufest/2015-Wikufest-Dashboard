@@ -2,8 +2,8 @@
 
 ## About
 
-This repository contains the source code for the Wikusama Wikufest Application. It is
-based on Symfony2.
+This repository contains the source code for the Wikusama Wikufest Dashboard.
+
 
 ## Contributor Guidelines
 http://www.php-fig.org/psr/psr-2/

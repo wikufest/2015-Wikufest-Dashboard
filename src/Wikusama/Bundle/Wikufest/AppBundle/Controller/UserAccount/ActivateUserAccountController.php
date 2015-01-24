@@ -15,6 +15,16 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ActivateUserAccountController extends Controller
 {
+    public function activateSingleAccountAction()
+    {
+        $username = "okta.rahadian";
+        $email = "okta.rahadian@hotmail.com";
+        
+        $this->get('wikufest.user_account')->activateAccount($username, $email);
+        
+        return new Response("Activate Account");
+    }
+    
     public function loadFromFileAction()
     {
         if(!$this->get('security.context')->isGranted('ROLE_ADMIN')) {

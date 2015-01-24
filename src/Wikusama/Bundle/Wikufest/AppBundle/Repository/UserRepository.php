@@ -65,4 +65,22 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         return $this->getEntityName() === $class
             || is_subclass_of($class, $this->getEntityName());
     }
+    
+    public function loadUserProfileByUsername($username)
+    {
+        $q = $this
+            ->createQueryBuilder('up')
+            ->select(array('up, u'))
+            ->leftJoin(
+                'WikusamaWikufestAppBundle:User', 
+                'u', 
+                \Doctrine\ORM\Query\Expr\Join::WITH,
+                'up.user =  u.id'
+            )
+            ->where('u.username = :username')
+            ->setParameter('username', $username)
+            ->getQuery();
+            
+        return $q->getResult();
+    }
 }

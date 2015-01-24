@@ -20,4 +20,22 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserProfileRepository extends EntityRepository
 {
+    
+    public function loadUserProfileByUsername($username)
+    {
+       $dbConnection = $this->getEntityManager()->getConnection();
+       
+       $sql = "SELECT 
+                `u`.`id` AS users_id, 
+                `u`.`username` AS users_username, 
+                `u`.`password` AS users_password, 
+                `u`.`email` AS users_email, 
+                `u`.`is_active` AS users_is_active,
+                `up`.`id`, `up`.`user_id`, `up`.`fullname`, `up`.`audience_promocode_status_id`, `up`.`occupacy`, `up`.`company_name`, `up`.`summary`, `up`.`account_activation`, `up`.`profile_picture_path`, `up`.`twitter_account`, `up`.`facebook_account`, `up`.`linkedin_account`, `up`.`student_class_name`, `up`.`student_id_number`, `up`.`phone_number`, `up`.`date_created`, `up`.`gender`
+                 FROM `users` `u` LEFT JOIN
+                 `user_profiles` `up` ON (u.id=up.user_id)
+                 WHERE LOWER(`u`.`username`) = LOWER(?)";
+   
+        return $dbConnection->fetchAssoc($sql, [$username]);
+    }
 }

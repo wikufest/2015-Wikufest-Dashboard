@@ -20,7 +20,6 @@ class LoginController extends Controller
     {
         $session = $request->getSession();
 
-        // get the login error if there is one
         if ($request->attributes->has(Security::AUTHENTICATION_ERROR)) {
             $error = $request->attributes->get(
                 Security::AUTHENTICATION_ERROR
@@ -31,14 +30,12 @@ class LoginController extends Controller
         } else {
             $error = '';
         }
-
-        // last username entered by the user
+        
         $lastUsername = (null === $session) ? '' : $session->get(Security::LAST_USERNAME);
 
         return $this->render(
             'WikusamaWikufestAppBundle:UserAccount/Login:index.html.twig',
             array(
-                // last username entered by the user
                 'last_username' => $lastUsername,
                 'error'         => $error,
             )

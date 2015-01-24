@@ -1,7 +1,12 @@
 services:
+    wikufest.notifcation:
+        class: Wikusama\Bundle\Wikufest\AppBundle\Services\Notification
+        arguments: [ "%default.notification.from.address%","@swiftmailer.mailer", "@templating"  ]
+
     wikufest.user_account:
         class: Wikusama\Bundle\Wikufest\AppBundle\Services\UserAccount
-        arguments: ["@doctrine.orm.entity_manager", "@security.encoder_factory"]
+        arguments: ["@doctrine.orm.entity_manager", "@security.encoder_factory", "@swiftmailer.mailer", "@wikufest.notifcation" ]
+    
     wikufest.user_blog:
         class: Wikusama\Bundle\Wikufest\AppBundle\Services\UserBlog
         arguments: ["@doctrine.orm.entity_manager"]
