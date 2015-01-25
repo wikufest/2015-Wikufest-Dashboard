@@ -13,17 +13,49 @@
 {% if error %}
     <div>{{ error.message }}</div>
 {% endif %}
-<form action="{{ url('app_login_check') }}" method="post">
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-    <input type="hidden" name="_target_path" value="" />
-    <div>
-        <input type="text" name="_username" placeholder="Username">
+
+<header id="home" class="page">
+    <div class="overlay">
+        <div class="container">
+            <div class="col-sm-12">
+                <div>
+                    <h1>Sign In</h1>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-        <input type="password" name="_password" placeholder="Password">
-    </div>
-    <div>
-        <input type="submit" value="Login">
-    </div>
-</form>
+</header>
+
+<div class="content">
+    <div class="container">
+		<div class="row">
+			<div class="col-sm-9">
+				<h1>Sign In</h1>
+				<h4>Please input your username and password</h4>
+				<form class="form-horizontal" action="{{ url('app_login_check') }}" method="post">
+					<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+					<input type="hidden" name="_target_path" value="" />
+					<div class="form-group">
+						<label for="inputText3" class="col-sm-2 control-label">Username</label>
+						<div class="col-sm-10">
+						<input type="text" class="form-control" id="inputText3" placeholder="Username" name="_username">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+						<div class="col-sm-10">
+						<input type="password" class="form-control" id="inputPassword3" placeholder="Password" name="_password">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-default">Sign in</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock %}
