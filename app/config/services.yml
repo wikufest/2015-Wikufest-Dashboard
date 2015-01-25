@@ -3,6 +3,7 @@
 parameters:
     default.notification.from.address: 'support@wikufest.org'
     last_day_promocode_date: '2015-01-26 23:59:59'
+    is_audience_can_choose_courses: Yes
 
 services:
 #    service_name:

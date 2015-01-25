@@ -29,7 +29,7 @@ class UserAccount
         EncoderFactory $encoderFactory, 
         \Swift_Mailer $mailer, 
         Notification $notificationService,
-        $lastDayPromocodeDate
+        $lastDayPromocodeDate 
         )
     {
         $this->entityManager = $entityManager;
@@ -37,6 +37,7 @@ class UserAccount
         $this->mailer = $mailer;
         $this->notificationService = $notificationService;
         $this->lastDayPromocodeDate = $lastDayPromocodeDate;
+        $this->isAudienceCanChooseCourses = $isAudienceCanChooseCourses;
     }
     
     public function changeUserPassword($username, $newPassword)

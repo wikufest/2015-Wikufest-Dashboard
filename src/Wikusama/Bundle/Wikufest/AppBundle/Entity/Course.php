@@ -45,6 +45,11 @@ class Course
     private $moduleFilePath;
     
     /**
+     * @ORM\Column(name="is_module_file_downloadable", type="boolean")
+     */
+    private $isModuleFileDownloadable;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="\Wikusama\Bundle\Wikufest\AppBundle\Entity\User")
      * @ORM\JoinColumn(name="instructor", referencedColumnName="id")
      **/
@@ -150,5 +155,28 @@ class Course
     public function getInstructor()
     {
         return $this->instructor;
+    }
+
+    /**
+     * Set isModuleFileDownloadable
+     *
+     * @param boolean $isModuleFileDownloadable
+     * @return Course
+     */
+    public function setIsModuleFileDownloadable($isModuleFileDownloadable)
+    {
+        $this->isModuleFileDownloadable = $isModuleFileDownloadable;
+
+        return $this;
+    }
+
+    /**
+     * Get isModuleFileDownloadable
+     *
+     * @return boolean 
+     */
+    public function getIsModuleFileDownloadable()
+    {
+        return $this->isModuleFileDownloadable;
     }
 }
