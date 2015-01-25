@@ -20,7 +20,7 @@
         <title>Wikusama Festival #4 - The Creative World</title>
 
         <!-- Bootstrap -->
-        {% stylesheets '@WikusamaWikufestAppBundle/Resources/public/css/bootstrap.min.css' filter='cssrewrite' %}
+        {% stylesheets '@WikusamaWikufestAppBundle/Resources/public/css/bootstrap.min.css' %}
                 <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
 
@@ -32,7 +32,7 @@
             '@WikusamaWikufestAppBundle/Resources/public/css/lightbox.min.css' 
             '@WikusamaWikufestAppBundle/Resources/public/css/style.css' 
             '@WikusamaWikufestAppBundle/Resources/public/css/media-query.css' 
-            filter='cssrewrite' %}
+         %}
                 <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
 
@@ -77,11 +77,11 @@
         <div id="top-nav">
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-3 col-sm-offset-9">
-						{% if is_granted('IS_AUTHENTICATED_FULLY') %}
-							<p>Welcome {{ app.user.username }} | <a href="{{ url('app_logout') }}">Sign Out</a></p>
+                    <div class="col-sm-3 col-sm-offset-9 topnav">
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+							<p>Welcome {{ app.user.username }} | <a class="topnav" href="{{ url('app_logout') }}">Sign Out</a></p>
 						{% elseif is_granted('IS_AUTHENTICATED_ANONYMOUSLY') %}
-							<a href="{{ url('app_login') }}">Sign in here</a>
+							<a href="{{ url('app_login') }}" class="topnav">Sign in here</a>
 						{% endif %}
                     </div>
                 </div>
@@ -1252,7 +1252,7 @@
         <footer>
             <div class="container">
                 <div class="row">
-                    <div class="col-md-3 col-sm-12 logo"><img src="assets/img/logo-white.png" alt="Wikufest#4 white logo" /> </div>
+                    <div class="col-md-3 col-sm-12 logo"><img src="{{ asset('bundles/wikusamawikufestapp/images/logo-white.png') }}" alt="Wikufest#4 white logo" /> </div>
                     <div class="col-md-6 col-sm-12 back-top">
                         <a href="#home" class="page-scroll">
                             <span class="fa-stack fa-lg fa-2x">
