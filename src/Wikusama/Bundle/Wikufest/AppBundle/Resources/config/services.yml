@@ -5,8 +5,12 @@ services:
 
     wikufest.user_account:
         class: Wikusama\Bundle\Wikufest\AppBundle\Services\UserAccount
-        arguments: ["@doctrine.orm.entity_manager", "@security.encoder_factory", "@swiftmailer.mailer", "@wikufest.notifcation" ]
+        arguments: ["@doctrine.orm.entity_manager", "@security.encoder_factory", "@swiftmailer.mailer", "@wikufest.notifcation", "%last_day_promocode_date%" ]
     
     wikufest.user_blog:
         class: Wikusama\Bundle\Wikufest\AppBundle\Services\UserBlog
         arguments: ["@doctrine.orm.entity_manager"]
+        
+    wikufest.course:
+        class: Wikusama\Bundle\Wikufest\AppBundle\Services\Course
+        arguments: ["@doctrine.orm.entity_manager", "@doctrine.dbal.default_connection"]

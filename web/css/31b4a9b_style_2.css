@@ -134,14 +134,14 @@ ul {
 
 header {
   color: white;
-  background: url(../bundles/wikusamawikufestapp/images/10495386_10152481683036253_1035897877323459436_o.jpg) no-repeat;
+  background: url(../Resources/public/img/10495386_10152481683036253_1035897877323459436_o.jpg) no-repeat;
   background-position: center center;
   background-size: cover;
 }
 header .overlay {
   padding: 60px 0px;
   z-index: 1;
-  background: url(../bundles/wikusamawikufestapp/images/header-overlay.png) no-repeat;
+  background: url(../Resources/public/img/header-overlay.png) no-repeat;
   background-position: center center;
   background-size: cover;
 }
@@ -270,7 +270,7 @@ header #counter .time span {
 }
 
 #schedule {
-  background: url(../bundles/wikusamawikufestapp/images/12477555374_8c62f069bf_k.jpg) no-repeat;
+  background: url(../Resources/public/img/12477555374_8c62f069bf_k.jpg) no-repeat;
   background-position: center center;
   background-size: cover;
 }
@@ -412,7 +412,7 @@ header #counter .time span {
   height: 100%;
   display: block;
   position: absolute;
-  background: url(../bundles/wikusamawikufestapp/images/unsplash_key_noteblog.jpg) no-repeat;
+  background: url(../Resources/public/img/unsplash_key_noteblog.jpg) no-repeat;
   background-size: auto 100%;
   background-position: center right;
   top: 0px;
@@ -1019,7 +1019,7 @@ footer .copy a {
   background-color: rgba(43, 109, 136, 0.9);
   background-repeat: no-repeat;
   background-size: 32px 64px;
-  background-image: url("../bundles/wikusamawikufestapp/images/cd-icon-controller.svg");
+  background-image: url("../Resources/public/img/cd-icon-controller.svg");
 }
 
 .no-touch #cd-zoom-in:hover, .no-touch #cd-zoom-out:hover {

@@ -20,7 +20,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserProfileRepository extends EntityRepository
 {
-    
     public function loadUserProfileByUsername($username)
     {
        $dbConnection = $this->getEntityManager()->getConnection();

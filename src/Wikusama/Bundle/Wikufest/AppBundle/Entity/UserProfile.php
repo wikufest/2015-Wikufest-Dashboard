@@ -106,10 +106,9 @@ class UserProfile
     private $user;
     
     /**
-     * @ORM\ManyToOne(targetEntity="\Wikusama\Bundle\Wikufest\AppBundle\Entity\AudiencePromoCodeStatus")
-     * @ORM\JoinColumn(name="audience_promocode_status_id", referencedColumnName="id")
-     **/
-    private $audiencePromoCodeStatus;
+     * @ORM\Column(type="boolean", name="is_have_promocode", nullable=true)
+     */
+    private $isHavePromoCode;
 
     /**
      * Get id
@@ -421,29 +420,6 @@ class UserProfile
     }
 
     /**
-     * Set audiencePromoCodeStatus
-     *
-     * @param \Wikusama\Bundle\Wikufest\AppBundle\Entity\AudiencePromoCodeStatus $audiencePromoCodeStatus
-     * @return UserProfile
-     */
-    public function setAudiencePromoCodeStatus(\Wikusama\Bundle\Wikufest\AppBundle\Entity\AudiencePromoCodeStatus $audiencePromoCodeStatus = null)
-    {
-        $this->audiencePromoCodeStatus = $audiencePromoCodeStatus;
-
-        return $this;
-    }
-
-    /**
-     * Get audiencePromoCodeStatus
-     *
-     * @return \Wikusama\Bundle\Wikufest\AppBundle\Entity\AudiencePromoCodeStatus 
-     */
-    public function getAudiencePromoCodeStatus()
-    {
-        return $this->audiencePromoCodeStatus;
-    }
-
-    /**
      * Set dateCreated
      *
      * @param \DateTime $dateCreated
@@ -487,5 +463,28 @@ class UserProfile
     public function getGender()
     {
         return $this->gender;
+    }
+
+    /**
+     * Set isHavePromoCode
+     *
+     * @param boolean $isHavePromoCode
+     * @return UserProfile
+     */
+    public function setIsHavePromoCode($isHavePromoCode)
+    {
+        $this->isHavePromoCode = $isHavePromoCode;
+
+        return $this;
+    }
+
+    /**
+     * Get isHavePromoCode
+     *
+     * @return boolean 
+     */
+    public function getIsHavePromoCode()
+    {
+        return $this->isHavePromoCode;
     }
 }

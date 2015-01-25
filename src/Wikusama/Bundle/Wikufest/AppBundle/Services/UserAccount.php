@@ -22,18 +22,21 @@ class UserAccount
     protected $encoderFactory;
     protected $mailer;
     protected $notificationService;
+    protected $lastDayPromocodeDate;
 
     public function __construct(
         EntityManager $entityManager, 
         EncoderFactory $encoderFactory, 
         \Swift_Mailer $mailer, 
-        Notification $notificationService
+        Notification $notificationService,
+        $lastDayPromocodeDate
         )
     {
         $this->entityManager = $entityManager;
         $this->encoderFactory = $encoderFactory;
         $this->mailer = $mailer;
         $this->notificationService = $notificationService;
+        $this->lastDayPromocodeDate = $lastDayPromocodeDate;
     }
     
     public function changeUserPassword($username, $newPassword)
@@ -107,14 +110,20 @@ class UserAccount
                 $user->setPassword(
                     $this->getEncodedPassword($user, $userNewPassword)
                 );
-                
-                
+              
                 $userProfileObject = $this->entityManager
                             ->getRepository("WikusamaWikufestAppBundle:UserProfile")->findOneBy(array(
                                     'user' => $user
                                 ));
                 
-                $userProfileObject->setAccountActivation(new \DateTime());
+                $userProfileObject->setAccountActivation(new \DateTime());               
+                
+                if(new \DateTime() <= new \DateTime($lastDayPromocodeDate))
+                {
+                    $userProfileObject->setIsHavePromoCode(true);
+                }else{
+                    $userProfileObject->setIsHavePromoCode(false);
+                }
                 
                 $this->entityManager->persist($user);
                 $this->entityManager->persist($userProfileObject);

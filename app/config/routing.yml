@@ -3,15 +3,20 @@ wikufest_dashboard:
     prefix:   /
 
 app_login:
-    path:     /login
+    path:     /Login
     defaults: { _controller: WikusamaWikufestAppBundle:UserAccount/Login:index }
     
+app_default:
+    path: /Default
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    'WikusamaWikufestAppBundle::landing.html.twig'
 
 app_login_check:
-    path:     /loginCheck
+    path:     /LoginCheck
     
 app_logout:
-    path:     /logout
+    path:     /Logout
 
     
 # app:

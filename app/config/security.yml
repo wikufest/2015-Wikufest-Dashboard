@@ -36,11 +36,11 @@ security:
                 csrf_provider: form.csrf_provider
                 use_referer: true
             logout:
-                path:   /logout
+                path:   /Logout
                 target: /
                 invalidate_session: true
             
     access_control:
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/Login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/Default, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }

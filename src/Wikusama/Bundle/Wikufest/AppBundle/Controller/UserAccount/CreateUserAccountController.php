@@ -21,11 +21,9 @@ class CreateUserAccountController extends Controller
             return new AccessDeniedException();
         }
         
-        // this is for initial purpose
-        $file = "C:\wamp\www\Wikufest-Dashboard/Student.csv";
+        $file = "";
         $this->get('wikufest.user_account')->bulkCreateFromCsv($file);
         
-        return new Response("Created");
-        
+        return new Response("loadFromFileAction");
     }
 }

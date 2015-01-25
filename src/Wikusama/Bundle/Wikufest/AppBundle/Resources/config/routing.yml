@@ -13,4 +13,12 @@ wikufest_useraccount_activateuseraccount_loadfromfile:
 wikufest_useraccount_activateuseraccount_activatesingleaccount:
     path: /UserAccount/ActivateUserAccount/ActivateSingleAccount
     defaults: { _controller: WikusamaWikufestAppBundle:UserAccount/ActivateUserAccount:activateSingleAccount }
+    
+wikufest_course_registeraudiencetocoursesession:
+    path: /Course/RegisterAudienceToCourseSession
+    defaults: { _controller: WikusamaWikufestAppBundle:Course/RegisterAudienceToCourseSession:index }
+    
+wikufest_course_registeraudiencetocoursesession_process:
+    path: /Course/RegisterAudienceToCourseSession/Process
+    defaults: { _controller: WikusamaWikufestAppBundle:Course/RegisterAudienceToCourseSession:process }
 

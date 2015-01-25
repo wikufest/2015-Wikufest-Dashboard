@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 /*
  *
  * (c) 2015 Okta Purnama Rahadian <okta.rahadian@hotmail.com>
@@ -7,38 +8,34 @@
  * file that was distributed with this source code.
  */
 
-namespace Wikusama\Bundle\Wikufest\AppBundle\Controller\UserAccount;
- 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+namespace Wikusama\Bundle\Wikufest\AppBundle\Controller\Course;
 
-class ActivateUserAccountController extends Controller
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Response;
+
+class RegisterAudienceToCourseSessionController extends Controller
 {
-    public function activateSingleAccountAction()
+    public function indexAction()
     {
         if(!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
             return new AccessDeniedException();
         }
         
-        $username = "";
-        $email = "";
-        
-        $this->get('wikufest.user_account')->activateAccount($username, $email);
-        
-        return new Response("activateSingleAccountAction");
+        return new Response("index");
     }
     
-    public function loadFromFileAction()
+    public function processAction()
     {
         if(!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
             return new AccessDeniedException();
         }
-
-        $file = "";
-        $this->get('wikufest.user_account')->bulkActivateFromCsv($file);
         
-        return new Response("loadFromFileAction");
+        $userId = "";
+        $courseSessionId = "";
         
+        $this->get('wikufest.course')->registerAudienceToCourseSession($userId, $courseSessionId);
+        
+        return new Response("process");
     }
 }
