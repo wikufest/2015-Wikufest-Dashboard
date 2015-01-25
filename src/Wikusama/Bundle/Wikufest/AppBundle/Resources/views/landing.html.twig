@@ -78,8 +78,11 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-3 col-sm-offset-9">
-                        <span class="fa fa-phone-square fa-fw"></span>&nbsp;0812-1461-3844&nbsp;
-                        <span class="fa fa-shopping-cart fa-fw"></span>&nbsp;(0) items
+						{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+							<p>Welcome {{ app.user.username }} | <a href="{{ url('app_logout') }}">Sign Out</a></p>
+						{% elseif is_granted('IS_AUTHENTICATED_ANONYMOUSLY') %}
+							<a href="{{ url('app_login') }}">Sign in here</a>
+						{% endif %}
                     </div>
                 </div>
             </div>
