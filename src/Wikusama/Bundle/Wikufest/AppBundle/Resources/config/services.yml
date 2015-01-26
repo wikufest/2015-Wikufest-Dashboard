@@ -13,4 +13,4 @@ services:
         
     wikufest.course:
         class: Wikusama\Bundle\Wikufest\AppBundle\Services\Course
-        arguments: ["@doctrine.orm.entity_manager", "@doctrine.dbal.default_connection", "%is_audience_can_choose_courses%"]
+        arguments: ["@doctrine.orm.entity_manager", "%is_audience_can_choose_courses%"]

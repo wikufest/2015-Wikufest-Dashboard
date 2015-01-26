@@ -38,7 +38,7 @@ class Course
      * @ORM\Column(name="title", type="string",length=255 )
      */
     private $title;
-    
+  
     /**
      * @ORM\Column(name="module_file_path", type="string",length=255 )
      */
