@@ -83,4 +83,14 @@ class UserRepository extends EntityRepository implements UserProviderInterface
             
         return $q->getResult();
     }
+    
+    public function loadAll()
+    {
+        $sql = "SELECT u.*,up.fullname AS `up_fullname`, up.student_class_name AS `up_student_class_name`
+                FROM users u
+                LEFT JOIN user_profiles up ON (u.id = up.user_id)";
+        
+        return $this->getEntityManager()
+                    ->getConnection()->fetchAll($sql);
+    }
 }

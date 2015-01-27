@@ -22,27 +22,29 @@ class CourseSessionRepository extends EntityRepository
 {
     public function loadAll()
     {
-        $sql = "SELECT T.*
+        $sql = "SELECT T.*, CASE WHEN T.session_duration > 90 THEN '1' ELSE '0' END AS `is_more_than_one_session` 
                     FROM (
-                    SELECT c_up.fullname AS `instructor_name`, 
-                    c.title AS `course_title`,
-                    cs.date_started AS `session_started`,
-                    cs.date_finished AS `session_finished`,
-                    cs.id AS `session_id`,
-                    r.name AS `room_name`,
-                    a_to_r.total_audience AS `total_current_audience`,
-                    a_to_r.room_capacity AS `session_capacity`,
-                    c_up.summary AS `course_summary`
-                    FROM course_sessions cs
-                    LEFT JOIN courses c ON (cs.course_id = c.id)
-                    LEFT JOIN user_profiles c_up ON (c.instructor = c_up.user_id)
-                    LEFT JOIN rooms r ON (cs.room_id = r.id)
-                    LEFT JOIN (
-                    SELECT r.id AS room_id, COUNT(1) AS total_audience,r.capacity AS room_capacity
-                    FROM audience_course_sessions acs
-                    LEFT JOIN course_sessions cs ON (acs.course_session_id = cs.id)
-                    LEFT JOIN rooms r ON cs.room_id = r.id
-                    GROUP BY r.id, r.capacity) a_to_r ON (r.id = a_to_r.room_id)
+                        SELECT c_up.fullname AS `instructor_name`, 
+                             c.title AS `course_title`,
+                             cs.date_started AS `session_started`,
+                             cs.date_finished AS `session_finished`,
+                             CEIL(TIME_TO_SEC(TIMEDIFF(cs.date_finished, cs.date_started)) / 60) `session_duration`, 
+                             cs.id AS `session_id`,
+                             r.name AS `room_name`,
+                             a_to_r.total_audience AS `total_current_audience`,
+                             a_to_r.room_capacity AS `session_capacity`,
+                             c_up.summary AS `course_summary`
+                             FROM course_sessions cs
+                             LEFT JOIN courses c ON (cs.course_id = c.id)
+                             LEFT JOIN user_profiles c_up ON (c.instructor = c_up.user_id)
+                             LEFT JOIN rooms r ON (cs.room_id = r.id)
+                             LEFT JOIN (
+                                 SELECT r.id AS room_id, COUNT(1) AS total_audience,r.capacity AS room_capacity
+                                 FROM audience_course_sessions acs
+                                 LEFT JOIN course_sessions cs ON (acs.course_session_id = cs.id)
+                                 LEFT JOIN rooms r ON cs.room_id = r.id
+                                 GROUP BY r.id, r.capacity
+                             ) a_to_r ON (r.id = a_to_r.room_id)
                     ) AS T
                     ORDER BY T.session_started, T.total_current_audience ASC
             ";

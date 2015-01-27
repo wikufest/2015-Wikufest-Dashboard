@@ -29,7 +29,8 @@ class UserAccount
         EncoderFactory $encoderFactory, 
         \Swift_Mailer $mailer, 
         Notification $notificationService,
-        $lastDayPromocodeDate 
+        $lastDayPromocodeDate,
+        $isAudienceCanChooseCourses 
         )
     {
         $this->entityManager = $entityManager;

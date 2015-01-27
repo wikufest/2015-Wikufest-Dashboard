@@ -29,6 +29,38 @@ class Course
     
     public function getFormatedCourses()
     {
+        // Data example
+        /**
+        {
+          "k_665c5bf9f6ace0431ce1cebfff6ee49a": {
+            "session_started": "2015-01-30 09:00:00",
+            "session_finished": "2015-01-30 12:00:00",
+            "h_session_started_date": "30 January 2015",
+            "h_session_finished_date": "30 January 2015",
+            "session_started_date": "2015-01-30",
+            "session_finished_date": "2015-01-30",
+            "h_session_started_hour": "09:00",
+            "h_session_finished_hour": "12:00",
+            "session_started_hour": "09:00:00",
+            "session_finished_hour": "12:00:00",
+            "courses": [
+              {
+                "instructor_name": "Foo Bar",
+                "course_title": "Foo Title",
+                "session_started": "2015-01-30 09:00:00",
+                "session_finished": "2015-01-30 12:00:00",
+                "session_duration": "180",
+                "session_id": "1",
+                "room_name": "Room 1",
+                "total_current_audience": "2",
+                "session_capacity": "40",
+                "course_summary": "Lorem ipsum dolor sit amet",
+                "is_more_than_one_session": "1"
+              }
+            ]
+          }
+        }
+        */
         $courses = $this
                     ->entityManager
                     ->getRepository("WikusamaWikufestAppBundle:CourseSession")
@@ -55,6 +87,11 @@ class Course
         }
 
         return $formatedResult;
+    }
+    
+    public function registerAudienceToCourseSession()
+    {
+    
     }
     
     public function getCourseModuleFilePath($courseId)

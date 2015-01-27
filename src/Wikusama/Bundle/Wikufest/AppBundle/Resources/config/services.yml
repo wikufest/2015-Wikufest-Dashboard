@@ -5,7 +5,7 @@ services:
 
     wikufest.user_account:
         class: Wikusama\Bundle\Wikufest\AppBundle\Services\UserAccount
-        arguments: ["@doctrine.orm.entity_manager", "@security.encoder_factory", "@swiftmailer.mailer", "@wikufest.notifcation", "%last_day_promocode_date%" ]
+        arguments: ["@doctrine.orm.entity_manager", "@security.encoder_factory", "@swiftmailer.mailer", "@wikufest.notifcation", "%last_day_promocode_date%", "%is_audience_can_choose_courses%" ]
     
     wikufest.user_blog:
         class: Wikusama\Bundle\Wikufest\AppBundle\Services\UserBlog
