@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 {#
     /*
      *
@@ -38,3 +39,34 @@
 		</div>
 	</form>
 {% endblock %}
+=======
+{#
+    /*
+     *
+     * (c) 2015 Okta Purnama Rahadian <okta.rahadian@hotmail.com>
+     *
+     * For the full copyright and license information, please view the LICENSE
+     * file that was distributed with this source code.
+     */
+#}
+
+{% extends 'WikusamaWikufestAppBundle::base.html.twig' %}
+{% block body %}
+{% if error %}
+    <div>{{ error.message }}</div>
+{% endif %}
+<form action="{{ url('app_login_check') }}" method="post">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+    <input type="hidden" name="_target_path" value="" />
+    <div>
+        <input type="text" name="_username" placeholder="Username">
+    </div>
+    <div>
+        <input type="password" name="_password" placeholder="Password">
+    </div>
+    <div>
+        <input type="submit" value="Login">
+    </div>
+</form>
+{% endblock %}
+>>>>>>> Stashed changes
