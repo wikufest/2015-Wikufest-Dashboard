@@ -22,7 +22,16 @@ class RegisterAudienceToCourseSessionController extends Controller
             return new AccessDeniedException();
         }
         
-        return new Response("index");
+		$error = null;
+		$courseSessionList = $this->get('wikufest.course')->getFormatedCourses();
+		
+        return $this->render(
+            'WikusamaWikufestAppBundle:Course/RegisterAudienceToCourseSession:registercourse.html.twig',
+            array(
+                'course_session_list' => $courseSessionList,
+                'error' => $error,
+            )
+        );
     }
     
     public function processAction()

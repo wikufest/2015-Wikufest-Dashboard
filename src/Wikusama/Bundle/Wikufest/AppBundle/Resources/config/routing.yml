@@ -6,6 +6,10 @@ wikufest_useraccount_createuseraccount_loadfromfile:
     path: /UserAccount/CreateUserAccount/LoadFromFile
     defaults: { _controller: WikusamaWikufestAppBundle:UserAccount/CreateUserAccount:loadFromFile }
     
+wikufest_useraccount_activateuseraccount_default:
+    path: /UserAccount/ActivateUserAccount/Default
+    defaults: { _controller: WikusamaWikufestAppBundle:UserAccount/ActivateUserAccount:default }
+    
 wikufest_useraccount_activateuseraccount_loadfromfile:
     path: /UserAccount/ActivateUserAccount/LoadFromFile
     defaults: { _controller: WikusamaWikufestAppBundle:UserAccount/ActivateUserAccount:loadFromFile }

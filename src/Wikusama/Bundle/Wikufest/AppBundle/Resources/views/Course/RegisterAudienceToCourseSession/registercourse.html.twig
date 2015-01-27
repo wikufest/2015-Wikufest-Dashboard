@@ -1,0 +1,113 @@
+{#
+    /*
+     *
+     * (c) 2015 Okta Purnama Rahadian <okta.rahadian@hotmail.com>
+     *
+     * For the full copyright and license information, please view the LICENSE
+     * file that was distributed with this source code.
+     */
+#}
+
+{% extends 'WikusamaWikufestAppBundle::base.html.twig' %}
+{% block body %}
+{% if error %}
+    <div>{{ error.message }}</div>
+{% endif %}
+	<h1>Take your class</h1>
+	<h4>This form is automatically update when you take the class</h4>
+	<table class="table table-bordered table-class">
+	{% set date = 0 %}
+	{% for session in course_session_list %}
+		{% if date != session.h_session_started_date %}
+			{% set date = session.h_session_started_date %}
+			<tr>
+				<th width="15%" class="text-center"><i class="fa fa-clock-o"></i></th>
+				<th width="85%">{{session.h_session_started_date}}</th>
+			</tr>
+		{% endif %}
+        
+		<tr>
+		<td class="text-center">{{session.h_session_started_hour}} - {{session.h_session_finished_hour}}</td>
+		<td>
+		<div class="row">
+			{% for course in session.courses %}
+				<div class="col-lg-4 col-md-6">
+				<div class="col-md-12 class-item {% if course.total_current_audience == course.session_capacity %}
+					class-close
+				{% endif %}">
+					<h3>{{course.instructor_name}}</h3>
+					<p><i class="fa fa-file-powerpoint-o"></i>&nbsp; {{course.course_title}}</p>
+					<p><i class="fa fa-location-arrow"></i>&nbsp; {{course.room_name}}</p>
+					<p class="text-right">({{course.total_current_audience}}/{{course.session_capacity}} in Class)&nbsp;<i class="fa fa-check-circle"></i></p>
+					<div class="btn-group btn-group-justified" role="group" aria-label="...">
+					<div class="btn-group" role="group">
+						<a href="#" class="btn btn-default">Detail</a>
+					</div>
+					<div class="btn-group" role="group">
+						<a href="#" class="btn btn-default">
+						{% if course.total_current_audience == course.session_capacity %}
+							Class Full
+						{% else %}	
+							Take This Class
+						{% endif %}
+						</a>
+					</div>
+					</div>
+				</div>
+				</div>
+			{% endfor %}
+	
+		</div>
+		</td>
+	</tr>
+    {% endfor %}
+	
+	</table>
+	</div>
+	<div class="col-md-3 sidebar">
+	<!--<h2>Search the class</h2>
+	<form class="form-inline" role="form">
+	<div class="form-group has-feedback">
+		<input type="text" class="form-control" id="inputSuccess4" placeholder="Type then press enter ..." aria-describedby="inputSuccess4Status">
+		<span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
+	</div>
+	</form>-->
+	<div class="row profile">
+	<div class="col-md-12">
+		<h2>Your Profile</h2>
+		<img src="" alt="" width="45" height="45">
+		<div class="profile-detail">
+		<h5><i class="fa fa-user"></i>&nbsp;Muhammad Ali Imron</h5>
+		<p><i class="fa fa-credit-card"></i>&nbsp;12.34.567</p>
+		</div>
+	</div>
+	</div>
+	
+	<div class="row legend">
+	<div class="col-md-12">
+		<h2>Legend</h2>
+		<div class="legend-wrap">
+		<div class="legend-box available"></div>
+		<p><i class="fa fa-bell"></i>&nbsp;Class Avilable</p>
+		<div class="clearfix"></div>
+		</div>
+		<div class="legend-wrap">
+		<div class="legend-box not-available"></div>
+		<p><i class="fa fa-bell-slash"></i>&nbsp;Class Not Avilable <br>(Quotas for this class are full)</p>
+		<div class="clearfix"></div>
+		</div>
+		<div class="legend-wrap">
+		<div class="legend-box taken"></div>
+		<p><i class="fa fa-check-circle"></i>&nbsp;Taken <br>(You have take this class)</p>
+		<div class="clearfix"></div>
+		</div>
+	</div>
+	</div>
+{% endblock %}
+{% block scripts %}
+	<script type="text/javascript">
+		$( document ).ready(function(){
+			
+		}
+	</script>
+{% endblock %}

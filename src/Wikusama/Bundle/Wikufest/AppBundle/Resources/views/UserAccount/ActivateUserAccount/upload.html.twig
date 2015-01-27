@@ -10,12 +10,14 @@
 
 {% extends 'WikusamaWikufestAppBundle::base.html.twig' %}
 {% block body %}
+{#
 {% if error %}
     <div>{{ error.message }}</div>
 {% endif %}
+#}
 	<h1>Upload File</h1>
 	<h4>Please select the Upload CSV file</h4>
-	<form class="form-horizontal" action="{{ url('app_login_check') }}" method="post" enctype="multipart/form-data">
+	<form class="form-horizontal" action="{{ url('wikufest_useraccount_activateuseraccount_loadfromfile') }}" method="post" enctype="multipart/form-data">
 		<div class="form-group">
 			<label for="inputText3" class="col-sm-2 control-label">File Path</label>
 			<div class="col-sm-10">

@@ -89,11 +89,6 @@ class Course
         return $formatedResult;
     }
     
-    public function registerAudienceToCourseSession()
-    {
-    
-    }
-    
     public function getCourseModuleFilePath($courseId)
     {
         $courseObj = $this->entityManager
