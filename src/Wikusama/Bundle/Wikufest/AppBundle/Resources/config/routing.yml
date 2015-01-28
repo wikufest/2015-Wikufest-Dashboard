@@ -22,6 +22,10 @@ wikufest_course_registeraudiencetocoursesession:
     path: /Course/RegisterAudienceToCourseSession
     defaults: { _controller: WikusamaWikufestAppBundle:Course/RegisterAudienceToCourseSession:index }
     
+wikufest_course_allschedule:
+    path: /Course/AllSchedule
+    defaults: { _controller: WikusamaWikufestAppBundle:Course/Schedule:index }
+    
 wikufest_course_registeraudiencetocoursesession_process:
     path: /Course/RegisterAudienceToCourseSession/Process
     defaults: { _controller: WikusamaWikufestAppBundle:Course/RegisterAudienceToCourseSession:process }

@@ -11,13 +11,13 @@
 namespace Wikusama\Bundle\Wikufest\AppBundle\Controller\Home;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class HomeController extends Controller
 {
     public function indexAction()
     {
-        return $this->render(
-            'WikusamaWikufestAppBundle:Home/Home:index.html.twig'
-        );
+        return $this->redirect($this->generateUrl('wikufest_course_registeraudiencetocoursesession'));
+		
     }
 }

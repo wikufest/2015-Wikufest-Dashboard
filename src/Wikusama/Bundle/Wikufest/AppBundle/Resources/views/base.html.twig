@@ -97,21 +97,16 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">
+                    <a class="navbar-brand" href="{{ url('app_default') }}">
 						<img src="{{ asset('bundles/wikusamawikufestapp/images/logo.png') }}" alt="Wikufest Logo"/>
 					</a>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="active"><a class="page-scroll" href="#home">home</a></li>
-                        <li><a class="page-scroll" href="#about">about</a></li>
-                        <li><a class="page-scroll" href="#schedule">schedule</a></li>
-                        <li><a class="page-scroll" href="#speakers">speaker</a></li>
-                        <li><a class="page-scroll" href="#sponsor">sponsor</a></li>
-                        <li><a class="page-scroll" href="blog.html">blog</a></li>
-                        <li><a class="page-scroll" href="#gallery">gallery</a></li>
-                        <li><a class="page-scroll" href="#merchandise">merchandise</a></li>
-                        <li><a class="page-scroll" href="#cd-google-map">location</a></li>
+					{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <li><a href="{{ url('wikufest_course_registeraudiencetocoursesession') }}">CLASS</a></li>
+                        <li><a href="{{ url('wikufest_course_allschedule') }}">SCHEDULE</a></li>
+					{% endif %}
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
