@@ -50,7 +50,7 @@ class CourseSessionRepository extends EntityRepository
                                 GROUP BY r.id, r.capacity) R1 ON r.id = R1.room_id 
                              ) a_to_r ON (r.id = a_to_r.room_id)
                     ) AS T
-                    ORDER BY T.session_started, T.total_current_audience ASC
+                    ORDER BY T.session_started, T.course_title ASC
             ";
 
         return $this->getEntityManager()
@@ -90,7 +90,7 @@ class CourseSessionRepository extends EntityRepository
                  ) a_to_r ON (r.id = a_to_r.room_id)
                  LEFT JOIN audience_course_sessions acs ON (cs.id = acs.course_session_id AND audience = :user_id)
         ) AS T
-        ORDER BY T.session_started, T.total_current_audience ASC
+        ORDER BY T.session_started, T.course_title ASC
             ";
 
         return $this->getEntityManager()

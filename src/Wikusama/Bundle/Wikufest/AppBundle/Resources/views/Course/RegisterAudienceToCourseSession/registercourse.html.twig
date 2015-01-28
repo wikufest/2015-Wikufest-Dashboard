@@ -130,19 +130,18 @@
                 return 0;
             }
             
-            button.addClass("course-session-taken");
-            button.attr("disabled","disabled");
-            button.text("Taken");
-            
-            courseSessionTime.push(sessionHourId);
-            takenCourseSessions.push(sessionId);
-            
             $.ajax({
                 url: '{{ url('wikufest_course_registeraudiencetocoursesession_process') }}',
                 data: { course_session_id : sessionId },
                 type : "POST",
                 success : function(result){
                     if(result.is_success){
+                        button.addClass("course-session-taken");
+                        button.attr("disabled","disabled");
+                        button.text("Taken");
+                        
+                        courseSessionTime.push(sessionHourId);
+                        takenCourseSessions.push(sessionId);
                         alert("Success");
                     }else{
                         alert("Failed, please choose other class");
