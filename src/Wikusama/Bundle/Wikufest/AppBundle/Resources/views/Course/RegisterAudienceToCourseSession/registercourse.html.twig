@@ -30,7 +30,7 @@
         
 		<tr>
 		<td class="text-center">{{session.h_session_started_hour}} - {{session.h_session_finished_hour}}</td>
-        {% if last_h_session_started_hour !== session.h_session_started_hour %}
+        {% if last_h_session_started_hour != session.h_session_started_hour %}
             {% set last_h_session_started_hour = session.h_session_started_hour %}
             {% set session_hour_id = session_hour_id + 1 %}
         {% endif %}
