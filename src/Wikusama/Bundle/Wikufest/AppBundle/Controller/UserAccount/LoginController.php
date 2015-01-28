@@ -13,13 +13,14 @@ namespace Wikusama\Bundle\Wikufest\AppBundle\Controller\UserAccount;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class LoginController extends Controller
 {
     public function indexAction(Request $request)
     {
         $session = $request->getSession();
-
+        
         if ($request->attributes->has(Security::AUTHENTICATION_ERROR)) {
             $error = $request->attributes->get(
                 Security::AUTHENTICATION_ERROR
@@ -32,6 +33,12 @@ class LoginController extends Controller
         }
         
         $lastUsername = (null === $session) ? '' : $session->get(Security::LAST_USERNAME);
+        
+        if(strrpos($request->headers->get('referer'), '/Default') === false){
+            if($error == '' &&  $lastUsername == ''){
+                return $this->redirect($this->generateUrl('app_default'));
+            }
+        }
 
         return $this->render(
             'WikusamaWikufestAppBundle:UserAccount/Login:index.html.twig',
