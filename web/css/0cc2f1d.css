@@ -16,15 +16,6 @@ body {
   -moz-border-radius: 0px !important;
 }
 
-.topnav a {
-	color : white;
-}
-
-.topnav a:hover a:focus {
-	color : white;
-	text-decoration : underline;
-}
-
 .img-circle {
   border-radius: 50% !important;
 }
@@ -1448,6 +1439,9 @@ footer .copy a {
   border: none;
   font-size: 12px;
   background: #1e9f00;
+}
+.content .table-class .class-item .btn-group .btn-grey {
+  background: #333;
 }
 .content .table-class .class-item .btn-group:first-child .btn {
   background: #0096ff;
