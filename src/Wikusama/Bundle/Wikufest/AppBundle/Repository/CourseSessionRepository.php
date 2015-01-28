@@ -22,7 +22,7 @@ class CourseSessionRepository extends EntityRepository
 {
     public function loadAll()
     {
-        $sql = "SELECT T.*, CASE WHEN T.session_duration > 90 THEN '1' ELSE '0' END AS `is_more_than_one_session` 
+        $sql = "SELECT DISTINCT T.*, CASE WHEN T.session_duration > 90 THEN '1' ELSE '0' END AS `is_more_than_one_session` 
                     FROM (
                         SELECT c_up.fullname AS `instructor_name`, 
                              c.title AS `course_title`,
@@ -60,7 +60,7 @@ class CourseSessionRepository extends EntityRepository
     
     public function loadAllByUser($userId)
     {
-        $sql = "SELECT T.*, CASE WHEN T.session_duration > 90 THEN '1' ELSE '0' END AS `is_more_than_one_session` 
+        $sql = "SELECT DISTINCT T.*, CASE WHEN T.session_duration > 90 THEN '1' ELSE '0' END AS `is_more_than_one_session` 
         FROM (
             SELECT c_up.fullname AS `instructor_name`, 
                  c.title AS `course_title`,
