@@ -17,9 +17,11 @@
 	<h4>This form is automatically update when you take the class</h4>
 	<table class="table table-bordered table-class">
 	{% set date = 0 %}
+    {% set session_date_id = 0 %}
 	{% for session in course_session_list %}
 		{% if date != session.h_session_started_date %}
 			{% set date = session.h_session_started_date %}
+            {% set session_date_id = session_date_id + 1 %}
 			<tr>
 				<th width="15%" class="text-center"><i class="fa fa-clock-o"></i></th>
 				<th width="85%">{{session.h_session_started_date}}</th>
@@ -41,16 +43,16 @@
 					<p class="text-right">({{course.total_current_audience}}/{{course.session_capacity}} in Class)&nbsp;<i class="fa fa-check-circle"></i></p>
 					<div class="btn-group btn-group-justified" role="group" aria-label="...">
 					<div class="btn-group" role="group">
-						<a href="#" class="btn btn-default">Detail</a>
+						<span class="btn btn-default">Detail</span>
 					</div>
 					<div class="btn-group" role="group">
-						<a href="#" class="btn btn-default">
 						{% if course.total_current_audience == course.session_capacity %}
-							Class Full
+							<span class="btn btn-default">Class Full</span>
+                        {% elseif course.is_taken == 1 %}
+                            <span class="btn btn-default" disabled="disabled">Taken</span>
 						{% else %}	
-							Take This Class
+							<span course-session-date-id="{{ session_date_id }}" course-session-id="{{ course.session_id }}" class="btn btn-default take-session">Take This Class</span>
 						{% endif %}
-						</a>
 					</div>
 					</div>
 				</div>
@@ -77,8 +79,7 @@
 		<h2>Your Profile</h2>
 		<img src="" alt="" width="45" height="45">
 		<div class="profile-detail">
-		<h5><i class="fa fa-user"></i>&nbsp;Muhammad Ali Imron</h5>
-		<p><i class="fa fa-credit-card"></i>&nbsp;12.34.567</p>
+		<h5><i class="fa fa-user"></i>{{ user_profile.fullname }}</h5>
 		</div>
 	</div>
 	</div>
@@ -106,8 +107,44 @@
 {% endblock %}
 {% block scripts %}
 	<script type="text/javascript">
-		$( document ).ready(function(){
-			
-		}
+        var courseSessionTime = [];
+        var takenCourseSessions = [];
+        
+		$("span.take-session").click(function(){
+            var button = $(this);
+            var classes = button.attr("class").split(' ');
+            var sessionDateId = button.attr('course-session-date-id');
+            var sessionId = button.attr('course-session-id');
+            
+            if($.inArray(sessionDateId, courseSessionTime) !== -1)
+            {
+                return 0;
+            }
+            
+            if($.inArray("course-session-taken", classes) !== -1)
+            {
+                return 0;
+            }
+            
+            button.addClass("course-session-taken");
+            button.attr("disabled","disabled");
+            button.text("Taken");
+            
+            courseSessionTime.push(sessionDateId);
+            takenCourseSessions.push(sessionId);
+            
+            $.ajax({
+                url: '{{ url('wikufest_course_registeraudiencetocoursesession_process') }}',
+                data: { course_session_id : sessionId },
+                type : "POST",
+                success : function(result){
+                    if(result.is_success){
+                        alert("Success");
+                    }else{
+                        alert("Failed, please choose other class");
+                    }
+                }
+            })
+        });
 	</script>
 {% endblock %}

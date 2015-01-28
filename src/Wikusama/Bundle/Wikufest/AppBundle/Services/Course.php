@@ -27,7 +27,7 @@ class Course
         $this->isAudienceCanChooseCourses = $isAudienceCanChooseCourses;
     }
     
-    public function getFormatedCourses()
+    public function getFormatedCourses($userId = null)
     {
         // Data example
         /**
@@ -61,10 +61,17 @@ class Course
           }
         }
         */
-        $courses = $this
-                    ->entityManager
-                    ->getRepository("WikusamaWikufestAppBundle:CourseSession")
-                    ->loadAll();
+        if($userId == null){
+            $courses = $this
+                        ->entityManager
+                        ->getRepository("WikusamaWikufestAppBundle:CourseSession")
+                        ->loadAll();
+        }else{
+            $courses = $this
+                        ->entityManager
+                        ->getRepository("WikusamaWikufestAppBundle:CourseSession")
+                        ->loadAllByUser($userId);
+        }
         
         $formatedResult = [];
         $sessionDay = [];
@@ -110,6 +117,36 @@ class Course
     {
         if($this->isAudienceCanChooseCourses)
         {
+            $isExist = $this->dbConnection->fetchAssoc(
+                "SELECT COUNT(1) AS `is_exist` FROM audience_course_sessions WHERE audience=:user_id AND course_session_id=:course_session_id",
+                [
+                    "user_id" => $userId,
+                    "course_session_id" => $courseSessionId
+                ]
+            );
+            
+            $isAvailable = $this->dbConnection->fetchAssoc(
+                "SELECT CASE WHEN T.total_audience < T.room_capacity THEN '1' ELSE '0' END AS `is_available`
+                    FROM (
+                    SELECT IFNULL(R1.total_audience,0) AS total_audience,r.capacity AS room_capacity
+                    FROM course_sessions cs
+                    LEFT JOIN rooms r ON cs.room_id = r.id
+                    LEFT JOIN (
+                    SELECT r.id AS room_id, COUNT(1) AS total_audience,r.capacity AS room_capacity
+                    FROM audience_course_sessions acs
+                    LEFT JOIN course_sessions cs ON (acs.course_session_id = cs.id)
+                    LEFT JOIN rooms r ON cs.room_id = r.id
+                    GROUP BY r.id, r.capacity) R1 ON r.id = R1.room_id 
+                    WHERE cs.id =:course_session_id) AS T",
+                [
+                    "course_session_id" => $courseSessionId
+                ]
+            );
+            
+            if($isExist['is_exist'] == '1' || $isAvailable['is_available'] == '0'){
+                return false;
+            }
+            
             $sql = "INSERT INTO `audience_course_sessions`(`audience`, `course_session_id`, `date_created`) 
                         VALUES (:user_id,:course_session_id,CURRENT_TIMESTAMP)";
             

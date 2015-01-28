@@ -12,39 +12,40 @@ namespace Wikusama\Bundle\Wikufest\AppBundle\Controller\Course;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class RegisterAudienceToCourseSessionController extends Controller
 {
     public function indexAction()
     {
-        if(!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            return new AccessDeniedException();
-        }
-        
 		$error = null;
-		$courseSessionList = $this->get('wikufest.course')->getFormatedCourses();
+		$courseSessionList = $this->get('wikufest.course')->getFormatedCourses(
+            $this->get('security.context')->getToken()->getUser()->getId()
+        );
+        
+        $userProfile = $this->getDoctrine()->getEntityManager()
+                            ->getRepository('WikusamaWikufestAppBundle:UserProfile')->loadUserProfileByUsername(
+            $this->get('security.context')->getToken()->getUser()->getUsername()
+        );
 		
         return $this->render(
             'WikusamaWikufestAppBundle:Course/RegisterAudienceToCourseSession:registercourse.html.twig',
             array(
                 'course_session_list' => $courseSessionList,
                 'error' => $error,
+                'user_profile' => $userProfile
             )
         );
     }
     
-    public function processAction()
+    public function processAction(Request $request)
     {
-        if(!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            return new AccessDeniedException();
-        }
+        $userId = $this->get('security.context')->getToken()->getUser()->getId();
+        $courseSessionId = $request->request->get('course_session_id');
         
-        $userId = "";
-        $courseSessionId = "";
+        $isSuccess = $this->get('wikufest.course')->registerAudienceToCourseSession($userId, $courseSessionId);
         
-        $this->get('wikufest.course')->registerAudienceToCourseSession($userId, $courseSessionId);
-        
-        return new Response("process");
+        return new JsonResponse(["is_success" => $isSuccess]);
     }
 }
