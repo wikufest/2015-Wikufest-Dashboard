@@ -172,12 +172,6 @@
             %}
             <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAl-EDTJ5_uU3zBIX7-wNTu-qSZr1DO5Dw"></script>
-         {% javascripts 
-            '@WikusamaWikufestAppBundle/Resources/public/js/maps.js'
-            %}
-            <script type="text/javascript" src="{{ asset_url }}"></script>
-        {% endjavascripts %}
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
         <script>
             //<![CDATA[
@@ -187,20 +181,7 @@
                 $('body').delay(350).css({'overflow':'visible'});
             });
             //]]>
-            $(document).ready(function(){
-                $(function() {
-                    var endDate = "January 30, 2015 12:00:01";
-                    $('#counter .timer').countdown({
-                        date: endDate,
-                        render: function(data) {
-                            $(this.el).html("<div class='col-xs-3 time'>" + this.leadingZeros(data.days, 2) + "<span>days</span></div><div class='col-xs-3 time'>" + this.leadingZeros(data.hours, 2) + "<span>hours</span></div><div class='col-xs-3 time'>" + this.leadingZeros(data.min, 2) + "<span>minutes</span></div><div class='col-xs-3 time'>" + this.leadingZeros(data.sec, 2) + "<span>seconds</span></div>");
-                        }
-                    });
-                    Slider.init();
-                });
-
-                $(".y-video").fitVids();
-            });
+			
             // jQuery for page scrolling feature - requires jQuery Easing plugin
             $(function() {
                 $('a.page-scroll').bind('click', function(event) {
