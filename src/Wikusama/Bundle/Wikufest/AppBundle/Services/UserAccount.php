@@ -23,6 +23,7 @@ class UserAccount
     protected $mailer;
     protected $notificationService;
     protected $lastDayPromocodeDate;
+    protected $dbConnection;
 
     public function __construct(
         EntityManager $entityManager, 
@@ -34,6 +35,7 @@ class UserAccount
         )
     {
         $this->entityManager = $entityManager;
+        $this->dbConnection = $entityManager->getConnection();
         $this->encoderFactory = $encoderFactory;
         $this->mailer = $mailer;
         $this->notificationService = $notificationService;
@@ -42,17 +44,13 @@ class UserAccount
     }
     
     public function changeUserPassword($username, $newPassword)
-    {
-        $user = $this->entityManager
-                    ->getRepository("WikusamaWikufestAppBundle:User")->findOneBy(array(
-                            'username' => $username
-                        ));
-                        
-        $user->setPassword($this->getEncodedPassword($user, $newPassword));
+    {        
+        $sql = "UPDATE users SET password=:password WHERE username=:username";
         
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
-        $this->entityManager->clear();
+        $this->dbConnection->executeQuery($sql, [
+            "password" => $this->getEncodedPassword($newPassword),
+            "username" => $username
+        ]);
     }
     
     public function bulkActivateFromCsv($csvPath)
@@ -85,6 +83,16 @@ class UserAccount
         
         $this->entityManager->flush();
         $this->entityManager->clear();
+    }
+    
+    public function dirtyActivateAccount($username)
+    {
+        $sql = "UPDATE user_profiles
+                LEFT JOIN users ON (user_profiles.user_id = users.id) 
+                SET user_profiles.account_activation= CURRENT_TIMESTAMP, users.is_active=1
+                WHERE users.username = :username";
+                
+        $this->dbConnection->executeQuery($sql, ["username"=>$username]);
     }
     
     public function activateAccount($username, $email = null)
@@ -145,20 +153,24 @@ class UserAccount
                         $username
                     );
     
-            
-        if(!empty($userProfile['users_email']) && !is_null($userProfile['users_email'])){
-            $this->notificationService->userAccountActivation(
-                $userProfile['users_email'],
-                $userProfile['fullname'],
-                $userProfile['users_username'],
-                $userNewPassword
-            );
-        }  
+        try{    
+            if(!empty($userProfile['users_email']) && !is_null($userProfile['users_email'])){
+                $this->notificationService->userAccountActivation(
+                    $userProfile['users_email'],
+                    $userProfile['fullname'],
+                    $userProfile['users_username'],
+                    $userNewPassword
+                );
+            }
+        }catch(\Exception $e){
+            // fail to send email do nothing
+        }
         
     }
     
-    public function getEncodedPassword(User $user, $password)
+    public function getEncodedPassword($password)
     {
+        $user = new User();
         $encoder = $this->encoderFactory->getEncoder($user);
         $hashedPassword = $encoder->encodePassword($password, $user->getSalt());
         

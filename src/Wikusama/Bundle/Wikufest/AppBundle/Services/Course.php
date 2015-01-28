@@ -67,9 +67,11 @@ class Course
                     ->loadAll();
         
         $formatedResult = [];
+        $sessionDay = [];
         
         foreach($courses as $row){
-            $fSessionStarted = "k_".md5($this->combineDateString($row['session_started']) . $this->combineDateString($row['session_finished']));
+            $fSessionStarted = "k_".md5($this->combineDateString($row['session_started']));
+            
             if(!array_key_exists($fSessionStarted, $formatedResult)){
                 $formatedResult[$fSessionStarted]['session_started'] = $row['session_started'];
                 $formatedResult[$fSessionStarted]['session_finished'] = $row['session_finished'];

@@ -39,12 +39,12 @@ class RegeneratePasswordCommand extends ContainerAwareCommand
         $users = $entityManager->getRepository('WikusamaWikufestAppBundle:User')->loadAll();
         
         foreach($users as $u)
-        {
+        {   
+            $this->getContainer()->get('wikufest.user_account')->dirtyActivateAccount($u['username']);
             $newPassword = $this->getContainer()->get('wikufest.user_account')->generateRandomPassword();
-            /**
             $this->getContainer()->get('wikufest.user_account')->changeUserPassword($u['username'], $newPassword);
-            fputcsv($csvFile, [$u['username'],$['up_fullname'] ,$['up_student_class_name'], $newPassword]);
-            */
+            
+            fputcsv($csvFile, [$u['username'], $u['up_fullname'] ,$u['up_student_class_name'], $newPassword]);
         }
         
         fclose($csvFile);
