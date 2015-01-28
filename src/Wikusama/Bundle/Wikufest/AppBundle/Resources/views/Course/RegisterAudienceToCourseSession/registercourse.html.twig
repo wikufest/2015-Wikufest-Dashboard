@@ -18,6 +18,7 @@
 	<table class="table table-bordered table-class">
 	{% set date = 0 %}
     {% set session_hour_id = 0 %}
+    {% set last_h_session_started_hour = "" %}
 	{% for session in course_session_list %}
 		{% if date != session.h_session_started_date %}
 			{% set date = session.h_session_started_date %}
@@ -29,10 +30,13 @@
         
 		<tr>
 		<td class="text-center">{{session.h_session_started_hour}} - {{session.h_session_finished_hour}}</td>
+        {% if last_h_session_started_hour !== session.h_session_started_hour %}
+            {% set last_h_session_started_hour = session.h_session_started_hour %}
+            {% set session_hour_id = session_hour_id + 1 %}
+        {% endif %}
 		<td>
 		<div class="row">
 			{% for course in session.courses %}
-                {% set session_hour_id = session_hour_id + 1 %}
 				<div class="col-lg-4 col-md-6">
 				<div class="col-md-12 class-item {% if course.total_current_audience == course.session_capacity %}
 					class-close
