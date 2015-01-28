@@ -17,11 +17,10 @@
 	<h4>This form is automatically update when you take the class</h4>
 	<table class="table table-bordered table-class">
 	{% set date = 0 %}
-    {% set session_date_id = 0 %}
+    {% set session_hour_id = 0 %}
 	{% for session in course_session_list %}
 		{% if date != session.h_session_started_date %}
 			{% set date = session.h_session_started_date %}
-            {% set session_date_id = session_date_id + 1 %}
 			<tr>
 				<th width="15%" class="text-center"><i class="fa fa-clock-o"></i></th>
 				<th width="85%">{{session.h_session_started_date}}</th>
@@ -33,6 +32,7 @@
 		<td>
 		<div class="row">
 			{% for course in session.courses %}
+                {% set session_hour_id = session_hour_id + 1 %}
 				<div class="col-lg-4 col-md-6">
 				<div class="col-md-12 class-item {% if course.total_current_audience == course.session_capacity %}
 					class-close
@@ -51,7 +51,7 @@
                         {% elseif course.is_taken == 1 %}
                             <span class="btn btn-default" disabled="disabled">Taken</span>
 						{% else %}	
-							<span course-session-date-id="{{ session_date_id }}" course-session-id="{{ course.session_id }}" class="btn btn-default take-session">Take This Class</span>
+							<span course-session-hour-id="{{ session_hour_id }}" course-session-id="{{ course.session_id }}" class="btn btn-default take-session">Take This Class</span>
 						{% endif %}
 					</div>
 					</div>
@@ -113,10 +113,10 @@
 		$("span.take-session").click(function(){
             var button = $(this);
             var classes = button.attr("class").split(' ');
-            var sessionDateId = button.attr('course-session-date-id');
+            var sessionHourId = button.attr('course-session-hour-id');
             var sessionId = button.attr('course-session-id');
             
-            if($.inArray(sessionDateId, courseSessionTime) !== -1)
+            if($.inArray(sessionHourId, courseSessionTime) !== -1)
             {
                 return 0;
             }
