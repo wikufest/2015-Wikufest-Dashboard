@@ -125,6 +125,19 @@ class Course
                 ]
             );
             
+            $isDuplicationSessionTime = $this->dbConnection->fetchAssoc(
+                "SELECT COUNT(1) AS `is_duplicate_session_time` FROM course_sessions cs INNER JOIN 
+                (
+                    SELECT cs.date_started FROM audience_course_sessions acs LEFT JOIN course_sessions cs
+                    ON (acs.course_session_id = cs.id) WHERE acs.audience = :user_id
+                ) AS R1 ON R1.date_started = cs.date_started
+                WHERE cs.id = :course_session_id",
+                [
+                    "user_id" => $userId,
+                    "course_session_id" => $courseSessionId
+                ]
+                );
+            
             $isAvailable = $this->dbConnection->fetchAssoc(
                 "SELECT CASE WHEN T.total_audience < T.room_capacity THEN '1' ELSE '0' END AS `is_available`
                     FROM (
@@ -143,7 +156,10 @@ class Course
                 ]
             );
             
-            if($isExist['is_exist'] == '1' || $isAvailable['is_available'] == '0'){
+            if($isExist['is_exist'] == '1' || 
+                $isAvailable['is_available'] == '0' ||
+                $isDuplicationSessionTime['is_duplicate_session_time'] == '1'
+                ){
                 return false;
             }
             
